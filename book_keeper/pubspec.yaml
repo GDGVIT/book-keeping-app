@@ -14,7 +14,11 @@ dependencies:
   flutter_riverpod: ^2.5.1
   google_sign_in: ^6.2.1
   http: ^1.2.1
+  image_picker: ^1.1.2
+  json_annotation: ^4.9.0
+  mobile_scanner: ^5.1.1
   riverpod_annotation: ^2.3.5
+  telephony: ^0.2.0
 
 dev_dependencies:
   flutter_test:
@@ -24,6 +28,7 @@ dev_dependencies:
   riverpod_lint: ^2.3.10
   custom_lint: ^0.6.4
   build_runner: ^2.4.11
+  json_serializable: ^6.8.0
 
 flutter:
   uses-material-design: true
