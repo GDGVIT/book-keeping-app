@@ -1,10 +1,10 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:book_keeper/auth/repository/auth_repo.dart';
+import 'package:book_keeper/auth/repository/firebase_auth_repository.dart';
 
-part 'login_page_controller.g.dart';
+part 'google_auth_controller.g.dart';
 
 @riverpod
-class LoginPageController extends _$LoginPageController {
+class GoogleAuthController extends _$GoogleAuthController {
   @override
   FutureOr<void> build() {}
 

@@ -1,6 +1,6 @@
 import 'package:book_keeper/auth/presentation/pages/home_screen.dart';
 import 'package:book_keeper/auth/presentation/pages/login_screen.dart';
-import 'package:book_keeper/auth/repository/auth_repo.dart';
+import 'package:book_keeper/auth/repository/firebase_auth_repository.dart';
 import 'package:book_keeper/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,7 +18,7 @@ class MainApp extends ConsumerWidget {
       home: user.when(
         data: (user) {
           if (user != null) {
-            return HomeScreen();
+            return const HomeScreen();
           } else {
             return const LoginScreen();
           }
