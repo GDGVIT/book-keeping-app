@@ -1,5 +1,5 @@
-import 'package:book_keeper/auth/pages/home_screen.dart';
-import 'package:book_keeper/auth/pages/login_screen.dart';
+import 'package:book_keeper/auth/presentation/pages/home_screen.dart';
+import 'package:book_keeper/auth/presentation/pages/login_screen.dart';
 import 'package:book_keeper/auth/repository/auth_repo.dart';
 import 'package:book_keeper/theme.dart';
 import 'package:flutter/material.dart';

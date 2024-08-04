@@ -1,4 +1,4 @@
-import 'package:book_keeper/auth/controllers/login_page_controller.dart';
+import 'package:book_keeper/auth/presentation/controllers/login_page_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
