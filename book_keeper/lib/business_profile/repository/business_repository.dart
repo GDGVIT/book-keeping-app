@@ -30,7 +30,7 @@ class BusinessImplRepository implements BusinessRepository {
     final res = await http.post(
       url,
       body: businessModel.toJson(),
-       headers: {
+      headers: {
         'Authorization': 'Bearer $accessToken',
       },
     );
@@ -46,9 +46,12 @@ class BusinessImplRepository implements BusinessRepository {
     Uri url = Uri.parse('$baseUrl/core/business/');
     final prefs = await SharedPreferences.getInstance();
     final accessToken = prefs.getString('access_token') ?? '';
-    final res = await http.get(url, headers: {
+    final res = await http.get(
+      url,
+      headers: {
         'Authorization': 'Bearer $accessToken',
-      },);
+      },
+    );
     if (res.statusCode == 200) {
       final List<dynamic> body = jsonDecode(res.body);
       return body.map((dynamic item) => BusinessModel.fromJson(item)).toList();
@@ -62,9 +65,12 @@ class BusinessImplRepository implements BusinessRepository {
     Uri url = Uri.parse('$baseUrl/core/business/$id/');
     final prefs = await SharedPreferences.getInstance();
     final accessToken = prefs.getString('access_token') ?? '';
-    final res = await http.get(url, headers: {
+    final res = await http.get(
+      url,
+      headers: {
         'Authorization': 'Bearer $accessToken',
-      },);
+      },
+    );
     if (res.statusCode == 200) {
       return BusinessModel.fromJson(jsonDecode(res.body));
     } else {
@@ -78,9 +84,13 @@ class BusinessImplRepository implements BusinessRepository {
     Uri url = Uri.parse('$baseUrl/core/business/$id/');
     final prefs = await SharedPreferences.getInstance();
     final accessToken = prefs.getString('access_token') ?? '';
-    final res = await http.patch(url, body: businessModel.toJson(), headers: {
+    final res = await http.patch(
+      url,
+      body: businessModel.toJson(),
+      headers: {
         'Authorization': 'Bearer $accessToken',
-      },);
+      },
+    );
     if (res.statusCode == 200) {
       return BusinessModel.fromJson(jsonDecode(res.body));
     } else {
@@ -109,9 +119,9 @@ class BusinessImplRepository implements BusinessRepository {
   }
 }
 
-
 @riverpod
-Future<BusinessModel> createBusiness(CreateBusinessRef ref, BusinessModel businessModel) async {
+Future<BusinessModel> createBusiness(
+    CreateBusinessRef ref, BusinessModel businessModel) async {
   final repository = BusinessImplRepository();
   return repository.createBusiness(businessModel);
 }
@@ -129,13 +139,15 @@ Future<BusinessModel> getBusinessById(GetBusinessByIdRef ref, int id) async {
 }
 
 @riverpod
-Future<BusinessModel> updateBusinessById(UpdateBusinessByIdRef ref, int id, BusinessModel businessModel) async {
+Future<BusinessModel> updateBusinessById(
+    UpdateBusinessByIdRef ref, int id, BusinessModel businessModel) async {
   final repository = BusinessImplRepository();
   return repository.updateBusinessById(id, businessModel);
 }
 
 @riverpod
-Future<BusinessModel> deleteBusinessById(DeleteBusinessByIdRef ref, int id) async {
+Future<BusinessModel> deleteBusinessById(
+    DeleteBusinessByIdRef ref, int id) async {
   final repository = BusinessImplRepository();
   return repository.deleteBusinessById(id);
 }
