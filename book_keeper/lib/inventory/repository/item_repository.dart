@@ -13,7 +13,7 @@ abstract class ItemRepository {
   Future<List<ItemModel>> getItemsForBusiness(int businessId);
   Future<ItemModel> createItem(ItemModel item);
   Future<ItemModel> updateItem(int id, ItemModel item);
-  Future<ItemModel> deleteItem(int id);
+  Future<void> deleteItem(int id);
 }
 
 class ItemImplRepository implements ItemRepository {
@@ -21,10 +21,15 @@ class ItemImplRepository implements ItemRepository {
 
   @override
   Future<ItemModel> createItem(ItemModel item) async {
-    Uri url = Uri.parse('$baseUrl/item/');
+    Uri url = Uri.parse('$baseUrl/core/items/');
+    final prefs = await SharedPreferences.getInstance();
+    final accessToken = prefs.getString('access_token') ?? '';
     final res = await http.post(
       url,
       body: item.toJson(),
+      headers: {
+        'Authorization': 'Bearer $accessToken',
+      },
     );
     if (res.statusCode == 200) {
       return ItemModel.fromJson(jsonDecode(res.body));
@@ -34,8 +39,8 @@ class ItemImplRepository implements ItemRepository {
   }
 
   @override
-  Future<ItemModel> deleteItem(int id) async {
-    Uri url = Uri.parse('$baseUrl/item/$id/');
+  Future<void> deleteItem(int id) async {
+    Uri url = Uri.parse('$baseUrl/core/items/$id/');
     final prefs = await SharedPreferences.getInstance();
     final accessToken = prefs.getString('access_token') ?? '';
     final res = await http.delete(
@@ -45,7 +50,7 @@ class ItemImplRepository implements ItemRepository {
       },
     );
     if (res.statusCode == 200) {
-      return ItemModel.fromJson(jsonDecode(res.body));
+      //
     } else if (res.statusCode == 401) {
       throw Exception('Unauthorized');
     } else {
@@ -55,8 +60,15 @@ class ItemImplRepository implements ItemRepository {
 
   @override
   Future<ItemModel> getItem(int id) async {
-    Uri url = Uri.parse('$baseUrl/item/$id/');
-    final res = await http.get(url);
+    Uri url = Uri.parse('$baseUrl/core/items/$id/');
+    final prefs = await SharedPreferences.getInstance();
+    final accessToken = prefs.getString('access_token') ?? '';
+    final res = await http.get(
+      url,
+      headers: {
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
     if (res.statusCode == 200) {
       return ItemModel.fromJson(jsonDecode(res.body));
     } else {
@@ -66,8 +78,15 @@ class ItemImplRepository implements ItemRepository {
 
   @override
   Future<List<ItemModel>> getItemsForBusiness(int businessId) async {
-    Uri url = Uri.parse('$baseUrl/item/?business=$businessId');
-    final res = await http.get(url);
+    Uri url = Uri.parse('$baseUrl/core/items/?business=$businessId');
+    final prefs = await SharedPreferences.getInstance();
+    final accessToken = prefs.getString('access_token') ?? '';
+    final res = await http.get(
+      url,
+      headers: {
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
     if (res.statusCode == 200) {
       final List<dynamic> body = jsonDecode(res.body);
       return body.map((dynamic item) => ItemModel.fromJson(item)).toList();
@@ -78,10 +97,15 @@ class ItemImplRepository implements ItemRepository {
 
   @override
   Future<ItemModel> updateItem(int id, ItemModel item) async {
-    Uri url = Uri.parse('$baseUrl/item/$id/');
+    Uri url = Uri.parse('$baseUrl/core/items/$id/');
+    final prefs = await SharedPreferences.getInstance();
+    final accessToken = prefs.getString('access_token') ?? '';
     final res = await http.put(
       url,
       body: item.toJson(),
+      headers: {
+        'Authorization': 'Bearer $accessToken',
+      },
     );
     if (res.statusCode == 200) {
       return ItemModel.fromJson(jsonDecode(res.body));
@@ -91,34 +115,33 @@ class ItemImplRepository implements ItemRepository {
   }
 }
 
-
 @riverpod
-Future<ItemModel> createItem(CreateItemRef ref,ItemModel item) async {
-  final repository=ItemImplRepository();
+Future<ItemModel> createItem(CreateItemRef ref, ItemModel item) async {
+  final repository = ItemImplRepository();
   return repository.createItem(item);
 }
 
 @riverpod
-Future<ItemModel> deleteItem(DeleteItemRef ref,int id) async {
-  final repository=ItemImplRepository();
+Future<void> deleteItem(DeleteItemRef ref, int id) async {
+  final repository = ItemImplRepository();
   return repository.deleteItem(id);
 }
 
 @riverpod
-Future<ItemModel> getItem(GetItemRef ref,int id) async {
-  final repository=ItemImplRepository();
+Future<ItemModel> getItem(GetItemRef ref, int id) async {
+  final repository = ItemImplRepository();
   return repository.getItem(id);
 }
 
 @riverpod
-Future<List<ItemModel>> getItemsForBusiness(GetItemsForBusinessRef ref,int businessId) async {
-  final repository=ItemImplRepository();
+Future<List<ItemModel>> getItemsForBusiness(
+    GetItemsForBusinessRef ref, int businessId) async {
+  final repository = ItemImplRepository();
   return repository.getItemsForBusiness(businessId);
 }
 
 @riverpod
-Future<ItemModel> updateItem(UpdateItemRef ref,int id,ItemModel item) async {
-  final repository=ItemImplRepository();
-  return repository.updateItem(id,item);
+Future<ItemModel> updateItem(UpdateItemRef ref, int id, ItemModel item) async {
+  final repository = ItemImplRepository();
+  return repository.updateItem(id, item);
 }
-

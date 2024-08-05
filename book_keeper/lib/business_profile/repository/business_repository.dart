@@ -22,13 +22,17 @@ abstract class BusinessRepository {
 
 class BusinessImplRepository implements BusinessRepository {
   final baseUrl = dotenv.env['BASE_URL'];
-
   @override
   Future<BusinessModel> createBusiness(BusinessModel businessModel) async {
-    Uri url = Uri.parse('$baseUrl/business/');
+    Uri url = Uri.parse('$baseUrl/core/business/');
+    final prefs = await SharedPreferences.getInstance();
+    final accessToken = prefs.getString('access_token') ?? '';
     final res = await http.post(
       url,
       body: businessModel.toJson(),
+       headers: {
+        'Authorization': 'Bearer $accessToken',
+      },
     );
     if (res.statusCode == 200) {
       return BusinessModel.fromJson(jsonDecode(res.body));
@@ -39,8 +43,12 @@ class BusinessImplRepository implements BusinessRepository {
 
   @override
   Future<List<BusinessModel>> getAllBusiness() async {
-    Uri url = Uri.parse('$baseUrl/business/');
-    final res = await http.get(url);
+    Uri url = Uri.parse('$baseUrl/core/business/');
+    final prefs = await SharedPreferences.getInstance();
+    final accessToken = prefs.getString('access_token') ?? '';
+    final res = await http.get(url, headers: {
+        'Authorization': 'Bearer $accessToken',
+      },);
     if (res.statusCode == 200) {
       final List<dynamic> body = jsonDecode(res.body);
       return body.map((dynamic item) => BusinessModel.fromJson(item)).toList();
@@ -51,8 +59,12 @@ class BusinessImplRepository implements BusinessRepository {
 
   @override
   Future<BusinessModel> getBusinessById(int id) async {
-    Uri url = Uri.parse('$baseUrl/business/$id/');
-    final res = await http.get(url);
+    Uri url = Uri.parse('$baseUrl/core/business/$id/');
+    final prefs = await SharedPreferences.getInstance();
+    final accessToken = prefs.getString('access_token') ?? '';
+    final res = await http.get(url, headers: {
+        'Authorization': 'Bearer $accessToken',
+      },);
     if (res.statusCode == 200) {
       return BusinessModel.fromJson(jsonDecode(res.body));
     } else {
@@ -63,8 +75,12 @@ class BusinessImplRepository implements BusinessRepository {
   @override
   Future<BusinessModel> updateBusinessById(
       int id, BusinessModel businessModel) async {
-    Uri url = Uri.parse('$baseUrl/business/$id/');
-    final res = await http.patch(url, body: businessModel.toJson());
+    Uri url = Uri.parse('$baseUrl/core/business/$id/');
+    final prefs = await SharedPreferences.getInstance();
+    final accessToken = prefs.getString('access_token') ?? '';
+    final res = await http.patch(url, body: businessModel.toJson(), headers: {
+        'Authorization': 'Bearer $accessToken',
+      },);
     if (res.statusCode == 200) {
       return BusinessModel.fromJson(jsonDecode(res.body));
     } else {
@@ -74,7 +90,7 @@ class BusinessImplRepository implements BusinessRepository {
 
   @override
   Future<BusinessModel> deleteBusinessById(int id) async {
-    Uri url = Uri.parse('$baseUrl/business/$id/');
+    Uri url = Uri.parse('$baseUrl/core/business/$id/');
     final prefs = await SharedPreferences.getInstance();
     final accessToken = prefs.getString('access_token') ?? '';
     final res = await http.delete(
