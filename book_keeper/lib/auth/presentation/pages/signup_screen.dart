@@ -1,24 +1,25 @@
 import 'package:book_keeper/auth/presentation/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:book_keeper/auth/presentation/pages/signup_screen.dart';
 
-class LoginScreen extends ConsumerStatefulWidget {
-  const LoginScreen({super.key});
+class SignupScreen extends ConsumerStatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<SignupScreen> createState() => _SignUpScreenState();
 }
 
-class _LoginScreenState extends ConsumerState<LoginScreen> {
+class _SignUpScreenState extends ConsumerState<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _nameController.dispose();
     super.dispose();
   }
 
@@ -37,7 +38,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Log In'),
+        title: const Text('Sign Up'),
       ),
       body: Center(
         child: state.isLoading
@@ -49,6 +50,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      TextFormField(
+                        controller: _nameController,
+                        decoration: const InputDecoration(labelText: 'Name'),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your name';
+                          }
+                          return null;
+                        },
+                      ),
                       TextFormField(
                         controller: _emailController,
                         decoration: const InputDecoration(labelText: 'Email'),
@@ -75,17 +86,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
+                            final name = _nameController.text;
                             final email = _emailController.text;
                             final password = _passwordController.text;
                             ref
                                 .read(authControllerProvider.notifier)
-                                .logInWithEmailAndPassword(
+                                .signUpWithEmailAndPassword(
+                                  name: name,
                                   email: email,
                                   password: password,
                                 );
                           }
                         },
-                        child: const Text('Log In'),
+                        child: const Text('Sign Up'),
                       ),
                       const SizedBox(height: 20),
                       ElevatedButton(
@@ -93,18 +106,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             .read(authControllerProvider.notifier)
                             .signInWithGoogle(),
                         child: const Text('Sign in with Google'),
-                      ),
-                      const SizedBox(height: 20),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SignupScreen(),
-                            ),
-                          );
-                        },
-                        child: const Text('Don\'t have an account? Sign Up'),
                       ),
                     ],
                   ),

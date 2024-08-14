@@ -1,4 +1,5 @@
 import 'package:book_keeper/scanner/scanner.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:telephony/telephony.dart';
 
@@ -26,7 +27,9 @@ class _HomeScreenState extends State<HomeScreen> {
       _message = message.body ?? "Error reading message body.";
       fetchConversations();
       fetchMessages(message.threadId ?? -1);
-      print(_messages);
+      if (kDebugMode) {
+        print(_messages);
+      }
     });
   }
 
@@ -101,15 +104,15 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const BarcodeScanner(),
-                  ),
-                );
-              },
-              child: const Text('Scanner'),
-            ),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const BarcodeScanner(),
+                ),
+              );
+            },
+            child: const Text('Scanner'),
+          ),
         ],
       ),
     ));

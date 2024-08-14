@@ -8,15 +8,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 part 'business_repository.g.dart';
 
 abstract class BusinessRepository {
-  // It return Json of BusinessModel post request to the server
   Future<BusinessModel> createBusiness(BusinessModel businessModel);
-  // It return Json of BusinessModel get request to the server get all business in a json<json> its json inside json
   Future<List<BusinessModel>> getAllBusiness();
-  // get a business by id
   Future<BusinessModel> getBusinessById(int id);
-  // update a business by id
   Future<BusinessModel> updateBusinessById(int id, BusinessModel businessModel);
-  // delete a business by id
   Future<BusinessModel> deleteBusinessById(int id);
 }
 
